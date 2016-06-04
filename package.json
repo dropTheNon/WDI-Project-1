@@ -1,5 +1,5 @@
 {
-  "name": "TEMPLATE-js",
+  "name": "Project1",
   "scripts": {
     "lint:js": "node_modules/eslint/bin/eslint.js src/js; exit 0",
     "lint:css": "node_modules/csslint/cli.js src/css/; exit 0",
