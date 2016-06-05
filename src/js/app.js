@@ -5,12 +5,14 @@ $(document).ready(function() {
 });
 
 // Declaring some variables
+var turnCount = 0;
 var attackerDiceCount;
 var defenderDiceCount;
 var attackerDiceResults = [];
 var defenderDiceResults = [];
 var territories = [
   {
+    // Example territory as object in array
     'name': 'Classroom2',
     'player': 'neutral',
     'troops': 3
@@ -32,20 +34,27 @@ for (i = attackerDiceCount; i > 0; i--) {
   attackerDiceResults.push(diceRoll());
 }
 
-// Sorting and reversing array of dice results
-var sortedAttackerArray = attackerDiceResults.sort();
-var finalAttackerArray = sortedAttackerArray.reverse();
+for (i = defenderDiceCount; i > 0; i--) {
+  defenderDiceResults.push(diceRoll());
+}
+
+// Declaring function to sort and reverse array of dice results
+var sortArray = function(array) {
+  return array.sort().reverse();
+}
 
 // Comparing dice results of two sorted, reversed arrays (of possibly different lengths)
 // Plugging in the to/from territories makes it easier to change troop #s w/o having to find index in our while loop.
-var compareResults = function(finalAttArr, finalDefArr, fromTerritory, toTerritory) {
+var compareResults = function(attackerDiceResults, defenderDiceResults, attTerritory, defTerritory) {
+  var sortedAttackerArray = sortArray(attackerDiceResults);
+  var sortedDefenderArray = sortArray(defenderDiceResults);
   var i = 0;
-  while(i < finalAttArr.length && i < finalDefArr.length) {
-    if (finalAttArr[i] > finalDefArr[i]) {
-      toTerritory.troops --;
+  while(i < sortedAttackerArray.length && i < sortedDefenderArray.length) {
+    if (sortedAttackerArray[i] > sortedDefenderArray[i]) {
+      defTerritory.troops --;
     } else {
-      fromTerritory.troops --;
+      attTerritory.troops --;
     }
     i++;
-  } console.log(territories);
+  }
 }
