@@ -13,49 +13,76 @@
     <h1>General Assault</h1>
     <!-- <button id="testButton" type="button" class="btn btn-primary">Button</button> -->
   </div>
-  <div id="mainPage" class="row">
+  <div id="mainPage" class="container-fluid row">
     <div id="mapBox" class="col-lg-8 col-md-6 col-sm-8 col-xs-12 mapBox">
       <img src="http://chezerbey.com/wp-content/uploads/2014/07/basement-plan.jpg" class="img-responsive">
       <h2>Testing text overlay over image</h2>
     </div>
-    <div id="player1Box" class="col-lg-2 col-md-3 col-sm-6 playerBox">Player Box 1
+    <div id="player1Box" class="col-lg-2 col-md-3 col-sm-4 playerBox">Player Box 1
       <div id="player1InfoBox">Player 1</div>
       <div id="player1ActionBox">Action Box
-      <div id="player1DeployDropdown" class="row">
-        <form>
-          <div id="howManyTroops">
-            <select>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-            </select>
-          </div>
-          <button id="deployButton" class="submit btn btn-primary">Deploy</button>
-        </form>
-      </div>
-      <div id="player1AttackDropdown" class="row">
-        <form id="player1Attack">
-          <div id="attackFrom" class="col-md-6">
-            <select>
-              <option>My Territory 1</option>
-              <option>My Territory 2</option>
-              <option>My Territory 3</option>
-            </select>
-          </div>
-          <div id="attackTo" class="col-md-6">
-            <select>
-              <option>Enemy 1</option>
-              <option>Enemy 2</option>
-              <option>Enemy 3</option>
-            </select>
-          </div>
-          <button id="attackButton" class="submit btn btn-primary" style="width: 80%, margin: center">Attack</button>
-          <button id="endAttackButton" class="submit btn btn-danger" style="width: 80%, margin: center">End Attacks</button>
-        </form>
-      </div>
+        <div id="player1DeployDropdown" class="row">
+          <form>
+            <div id="howManyTroops">
+              <select>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+              </select>
+              <select>
+                <option>My Territory 1</option>
+                <option>My Territory 2</option>
+                <option>My Territory 3</option>
+              </select>
+            </div>
+            <button id="deployButton" class="submit btn btn-primary">Deploy</button>
+          </form>
+        </div>
+        <div id="player1AttackDropdown" class="row">
+          <form id="player1Attack">
+            <div id="attackFrom" class="col-md-6">
+              <select>
+                <option>My Territory 1</option>
+                <option>My Territory 2</option>
+                <option>My Territory 3</option>
+              </select>
+            </div>
+            <div id="attackTo" class="col-md-6">
+              <select>
+                <option>Enemy 1</option>
+                <option>Enemy 2</option>
+                <option>Enemy 3</option>
+              </select>
+            </div>
+            <button id="attackButton" class="submit btn btn-primary" style="width: 80%, margin: center">Attack</button>
+            <button id="endAttackButton" class="submit btn btn-danger" style="width: 80%, margin: center">End Attacks</button>
+          </form>
+        </div>
+        <div id="player1ReinforceDropdown" class="row">
+          <form id="player1Reinforce">
+            <div id="reinforceFrom" class="col-md-6">
+              <select>
+                <option>My Territory 1</option>
+                <option>My Territory 2</option>
+                <option>My Territory 3</option>
+              </select>
+            </div>
+            <div id="reinforceTo" class="col-md-6">
+              <select>
+                <option>My Territory 1</option>
+                <option>My Territory 2</option>
+                <option>My Territory 3</option>
+              </select>
+            </div>
+            <div>
+              <button id="reinforceButton" class="submit btn btn-primary" style="margin: center">Reinforce</button>
+              <button id="endReinforcementsButton" class="submit btn btn-danger" style="margin: center">End Reinforcements</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-    <div id="player2Box" class="col-lg-2 col-md-3 col-sm-6 playerBox">Player Box 2
+    <div id="player2Box" class="col-lg-2 col-md-3 col-sm-4 playerBox">Player Box 2
       <div id="player2InfoBox">Player 2</div>
       <div id="player2ActionBox">Action Box</div>
     </div>
