@@ -10,6 +10,10 @@ var attackerDiceCount;
 var defenderDiceCount;
 var attackerDiceResults = [];
 var defenderDiceResults = [];
+var fromTerritories = [];
+var toTerritories = [];
+var p1Territories = [];
+var p2Territories = [];
 var territories = [
   {
     // Example territory as object in array
@@ -56,5 +60,12 @@ var compareResults = function(attackerDiceResults, defenderDiceResults, attTerri
       attTerritory.troops --;
     }
     i++;
+    if (defTerritory.troops === 0) {
+      /* attacker */.troops --;
+      defTerritory.troops = 1;
+      defTerritory.player = /* attacker */
+      /* p1 or p2 */Territories.push(defTerritory);
+      /* p1 or pw */Territories.splice(/* index of defTerritory */ , 1);
+    };
   }
 }
