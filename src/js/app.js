@@ -71,7 +71,6 @@ var deploy = function(troopsToDeploy, territoryToDeployOnto) {
 // check for win conditions (attacker successfully takes a territory),
 // and then will allow the attacker to advance troops.
 
-
 var attack = function(attTerritory, defTerritory) {
   var effectiveTroops = attTerritory.troops - 1;
   // Attackers Dice Count
@@ -119,5 +118,5 @@ var attack = function(attTerritory, defTerritory) {
     };
   };
   // jQuery to update the values of changed territories, refocus on attackBox,
-  // display message in/near attackBox (alert?) stating result.
+  // display message (alert?) stating result, including showing dice rolls.
 };
