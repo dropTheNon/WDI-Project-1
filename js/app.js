@@ -13,14 +13,12 @@ $(document).ready(function() {
 var p1;
 var p2;
 var attacker;
-var defender;
 var turnCount = 0;
 var attackerDiceCount;
 var defenderDiceCount;
 var attackerDiceResults = [];
 var defenderDiceResults = [];
 var attTerritories = [];
-var defTerritories = [];
 var p1Territories = [];
 var p2Territories = [];
 var territories = [
@@ -38,6 +36,16 @@ var territories = [
 
 /* ================ Declaring some functions =============== */
 
+// Determine who the attacker is
+var whoseTurn = function() {
+  if (turnCount % 2 === 0) {
+    attacker = p1;
+    attTerritories = p1Territories;
+  } else {
+    attacker = p2;
+    attTerritories = p2Territories;
+  }
+}
 
 // Dice roll function
 var diceRoll = function() {
@@ -49,12 +57,21 @@ var sortArray = function(array) {
   return array.sort().reverse();
 };
 
-// If statement to create drop down menu of valid attack-from territories
+// Function to create deployTroopSelectBox
+var deployTroopsLoop = function () {
+  for (var i = 0; i < troopsToDeploy; i++) {
+    var j = i + 1;
+    $('.deployTroopSelectBox').append("<option value='" + j + "'>" + j + "</option>");
+  }
+};
 
-// var effectiveTroops = attTerritory.troops - 1;
-// if (effectiveTroops > 0) {
-//   // add to dropdown menu as valid attack-from option
-// };
+// Function to create deployToTerritorySelectBox
+var deployOntoLoop = function () {
+  for (var i = 0; i < attTerritories.length; i++) {
+    $('.deployToTerritorySelectBox').append("<option value='" + i + "'>" + attTerritories[i].name + "</option");
+  }
+};
+
 
 
 /* =============== Click Event Delegation Declaration ============= */
@@ -64,38 +81,52 @@ var sortArray = function(array) {
 
 // Upon beginning game, shows P1 Deploy Box, populates selectbox with # of troop options
 $('#beginGame').click(function() {
-    $('.box').hide();
-    var troopsToDeploy = 3;
-    for (var i = 0; i < troopsToDeploy; i++) {
-      var j = i + 1;
-      $('.deployTroopSelectBox').append("<option>" + j + "</option>");
-    }
-    $('#player1DeployBox').show();
-  })
+  whoseTurn();
+  $('.box').hide();
+  var troopsToDeploy = 3;
+  deployTroopsLoop();
+  deployOntoLoop();
+  $('#player1DeployBox').show();
+});
 
 // Does the same as the above function, but upon end of the last players turn
 $('.endTurn').click(function() {
-    $('.box').hide();
-    var troopsToDeploy = 3;
-    for (var i = 0; i < troopsToDeploy; i++) {
-      var j = i + 1;
-      $('.deployTroopSelectBox').append("<option>" + j + "</option>");
-    }
-    $('#player1DeployBox').show();
-  })
+  turnCount ++;
+  // Working on this bit below!
+  p2Territories = territories.filter(territories)
+  // This bit above!
+  whoseTurn();
+  $('.form').reset();
+  $('.box').hide();
+  var troopsToDeploy = 3;
+  deployTroopsLoop();
+  deployOntoLoop();
+  $('#player1DeployBox').show();
+});
+
 
 $('.deployButton').click(function() {
-  // Code to push troops to selected territory
+  // Pushes troops to selected territory
+  var numTroopsToBeDeployed = $('#p1DeployTroopSelectBox').val;
   for (var i = 0; i < territories.length; i++) {
-    if ($('#p1DeployTerritorySelectBox').val === territories[i].name) {
-      territories[i].troops = territories[i].troops + $('p1DeployTroopSelectBox').val;
+    var terrToDeployOn = $('#p1DeployTerritorySelectBox').val
+    if (terrToDeployOn === territories[i].name) {
+      numTroopsToBeDeployed = parseInt(numTroopsToBeDeployed, 10);
+      console.log("numTroopsToBeDeployed:", numTroopsToBeDeployed);
+      territories[i].troops = territories[i].troops + numTroopsToBeDeployed;
     }
   }
-  // Code to clear selectbox
+  // Clears selectboxes (I hope!!!)
+  $('.deployTroopSelectBox').reset();
   // Decrement troopsToDeploy
+  troopsToDeploy = troopsToDeploy - numTroopsToBeDeployed;
+  // Checking to see if deployment still ongoing
   if (troopsToDeploy < 1) {
     $('.box').hide();
+    $('.form').reset();
     $('#player1AttackBox').show();
+  } else {
+    deployTroopsLoop();
   }
 });
 
