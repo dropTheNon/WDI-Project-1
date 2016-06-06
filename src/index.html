@@ -21,53 +21,50 @@
     <div id="player1Box" class="col-lg-2 col-md-3 col-sm-4 playerBox">Player Box 1
       <div id="player1InfoBox">Player 1</div>
       <div id="player1ActionBox">Action Box
-        <div id="player1DeployDropdown" class="row">
-          <form>
+        <div id="player1DeployBox" class="row box">
+         <!--  <form> -->
             <div id="howManyTroops">
-              <select>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
+              <select id="p1DeployTroopSelectBox" class="deployTroopSelectBox">
               </select>
-              <select>
+              <select id="p1DeployTerritorySelectBox" class="deployTerritorySelectBox">
                 <option>My Territory 1</option>
                 <option>My Territory 2</option>
                 <option>My Territory 3</option>
               </select>
             </div>
-            <button id="deployButton" class="submit btn btn-primary">Deploy</button>
-          </form>
+            <button id="p1DeployButton" class="deployButton button btn btn-primary">Deploy</button>
+          <!-- </form> -->
         </div>
-        <div id="player1AttackDropdown" class="row">
-          <form id="player1Attack">
-            <div id="attackFrom" class="col-md-6">
+        <div id="player1AttackBox" class="row box">
+          <!-- <form id="player1Attack"> -->
+            <div id="p1AttackFrom" class="col-md-6">
               <select>
                 <option>My Territory 1</option>
                 <option>My Territory 2</option>
                 <option>My Territory 3</option>
               </select>
             </div>
-            <div id="attackTo" class="col-md-6">
+            <div id="p1AttackTo" class="col-md-6">
               <select>
                 <option>Enemy 1</option>
                 <option>Enemy 2</option>
                 <option>Enemy 3</option>
               </select>
             </div>
-            <button id="attackButton" class="submit btn btn-primary" style="width: 80%, margin: center">Attack</button>
-            <button id="endAttackButton" class="submit btn btn-danger" style="width: 80%, margin: center">End Attacks</button>
-          </form>
+            <button id="p1AttackButton" class="attackButton submit btn btn-primary" style="width: 80%, margin: center">Attack</button>
+            <button id="p1EndAttackButton" class="endAttackButton submit btn btn-danger" style="width: 80%, margin: center">End Attacks</button>
+          <!-- </form> -->
         </div>
-        <div id="player1ReinforceDropdown" class="row">
+        <div id="player1ReinforceBox" class="row box">
           <form id="player1Reinforce">
-            <div id="reinforceFrom" class="col-md-6">
+            <div id="p1ReinforceFrom" class="col-md-6">
               <select>
                 <option>My Territory 1</option>
                 <option>My Territory 2</option>
                 <option>My Territory 3</option>
               </select>
             </div>
-            <div id="reinforceTo" class="col-md-6">
+            <div id="p1ReinforceTo" class="col-md-6">
               <select>
                 <option>My Territory 1</option>
                 <option>My Territory 2</option>
@@ -75,8 +72,8 @@
               </select>
             </div>
             <div>
-              <button id="reinforceButton" class="submit btn btn-primary" style="margin: center">Reinforce</button>
-              <button id="endReinforcementsButton" class="submit btn btn-danger" style="margin: center">End Reinforcements</button>
+              <button id="p1ReinforceButton" class="reinforceButton submit btn btn-primary" style="margin: center">Reinforce</button>
+              <button id="p1EndReinforceButton" class="endTurn submit btn btn-danger" style="margin: center">End Reinforcements</button>
             </div>
           </form>
         </div>
