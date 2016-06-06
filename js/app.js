@@ -2,6 +2,8 @@ $(document).ready(function() {
   // $('#testButton').click(function() {
   //   alert('Testing button');
   // });
+  $('.box').hide();
+  $('#player1AttackBox').show();
 });
 
 
@@ -49,19 +51,67 @@ var sortArray = function(array) {
 
 // If statement to create drop down menu of valid attack-from territories
 
-var effectiveTroops = attTerritory.troops - 1;
-if (effectiveTroops > 0) {
-  // add to dropdown menu as valid attack-from option
-};
+// var effectiveTroops = attTerritory.troops - 1;
+// if (effectiveTroops > 0) {
+//   // add to dropdown menu as valid attack-from option
+// };
 
 
-/* ================ Deploy Troops Function ================ */
-// This function lets you deploy your new troops (usually 3) each round,
-// before starting your attacks.
+/* =============== Click Event Delegation Declaration ============= */
 
-var deploy = function(troopsToDeploy, territoryToDeployOnto) {
-  // Create dropdown menu option for troopsToDeploy
-}
+
+// ------- Deploying Troops --------
+
+// Upon beginning game, shows P1 Deploy Box, populates selectbox with # of troop options
+$('#beginGame').click(function() {
+    $('.box').hide();
+    var troopsToDeploy = 3;
+    for (var i = 0; i < troopsToDeploy; i++) {
+      var j = i + 1;
+      $('.deployTroopSelectBox').append("<option>" + j + "</option>");
+    }
+    $('#player1DeployBox').show();
+  })
+
+// Does the same as the above function, but upon end of the last players turn
+$('.endTurn').click(function() {
+    $('.box').hide();
+    var troopsToDeploy = 3;
+    for (var i = 0; i < troopsToDeploy; i++) {
+      var j = i + 1;
+      $('.deployTroopSelectBox').append("<option>" + j + "</option>");
+    }
+    $('#player1DeployBox').show();
+  })
+
+$('.deployButton').click(function() {
+  // Code to push troops to selected territory
+  for (var i = 0; i < territories.length; i++) {
+    if ($('#p1DeployTerritorySelectBox').val === territories[i].name) {
+      territories[i].troops = territories[i].troops + $('p1DeployTroopSelectBox').val;
+    }
+  }
+  // Code to clear selectbox
+  // Decrement troopsToDeploy
+  if (troopsToDeploy < 1) {
+    $('.box').hide();
+    $('#player1AttackBox').show();
+  }
+});
+
+// --------- Attacking Troops ----------
+
+$('.attackButton').click(function() {
+  for (var i = 0; i < territories.length; i ++) {
+    if ($('#p1AttackFrom').val === territories[i].name) {
+      var attacker = territories[i];
+    }
+    if ($('#p1AttackTo').val === territories[i].name) {
+      var defender = territories[i];
+    }
+  }
+  attack(attacker, defender);
+});
 
 
 /* ================ Main Function - Attack =============== */
@@ -112,7 +162,7 @@ var attack = function(attTerritory, defTerritory) {
       defTerritory.troops = 1;
       defTerritory.player = attacker;
       attTerritories.push(defTerritory);
-      defTerritories.splice(/* index of defTerritory */ , 1);
+      // defTerritories.splice(/* index of defTerritory */ , 1);
       /* Create drop-down menu function with choices for (attTerritory.troops - 1) */
       return alert(/* Good-looking pop-up to choose how many troops to advance */)
     };
