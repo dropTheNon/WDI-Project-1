@@ -14,3 +14,7 @@ h2 {
   width: 50%;
   top: 0;
 }
+
+select:invalid {
+  color: grey;
+}

@@ -21,14 +21,15 @@
     <div id="player1Box" class="col-lg-2 col-md-3 col-sm-4 playerBox">Player Box 1
       <div id="player1InfoBox">Player 1</div>
       <div id="player1ActionBox">Action Box
+        <button id="beginGame" type="button" class="btn btn-primary">Begin Game</button>
         <div id="player1DeployBox" class="row box deployBox p1">
          <!--  <form class="form"> -->
             <div id="howManyTroops">
               <select id="p1DeployTroopSelectBox" class="deployHowMany">
-                <option value="" disabled selected hidden>Select number of troops...</option>
+                <option value="0" disabled selected hidden>Select number of troops...</option>
               </select>
               <select id="p1DeployToTerritorySelectBox" class="deployToTerritory">
-                <option value="" disabled selected hidden>Select territory to deploy onto...</option>
+                <option value="0" disabled selected hidden>Select territory to deploy onto...</option>
               </select>
             </div>
             <button id="p1DeployButton" class="deployButton button btn btn-primary">Deploy</button>
