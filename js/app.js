@@ -45,7 +45,7 @@ var whoseTurn = function() {
     attacker = p2;
     attTerritories = p2Territories;
   }
-}
+};
 
 // Dice roll function
 var diceRoll = function() {
@@ -72,7 +72,16 @@ var deployOntoLoop = function () {
   }
 };
 
-
+// Function to Advance troops
+var advanceTroops = function() {
+  var advanceableTroops = attTerritory.troops - 1;
+  var j = i + 1;
+  if (advanceableTroops > 0) {
+    for (var i = 0; i < advanceableTroops; i++) {
+      $('.advanceTroopsSelect').append("<option value='" + j + "'>" + j + "</option>" )
+    }
+  }
+};
 
 /* =============== Click Event Delegation Declaration ============= */
 
@@ -86,11 +95,11 @@ $('#beginGame').click(function() {
   var troopsToDeploy = 3;
   deployTroopsLoop();
   deployOntoLoop();
-  $('#player1DeployBox').show();
+  $('.deployBox').show();
 });
 
 // Does the same as the above function, but upon end of the last players turn
-$('.endTurn').click(function() {
+$('.endTurnButton').click(function() {
   turnCount ++;
   // Working on this bit below!
   p2Territories = territories.filter(territories)
@@ -101,7 +110,7 @@ $('.endTurn').click(function() {
   var troopsToDeploy = 3;
   deployTroopsLoop();
   deployOntoLoop();
-  $('#player1DeployBox').show();
+  $('.deployBox').show();
 });
 
 
@@ -124,13 +133,13 @@ $('.deployButton').click(function() {
   if (troopsToDeploy < 1) {
     $('.box').hide();
     $('.form').reset();
-    $('#player1AttackBox').show();
+    $('.attackBox .p2').show();
   } else {
     deployTroopsLoop();
   }
 });
 
-// --------- Attacking Troops ----------
+// --------- Attacking ----------
 
 $('.attackButton').click(function() {
   for (var i = 0; i < territories.length; i ++) {
@@ -143,6 +152,14 @@ $('.attackButton').click(function() {
   }
   attack(attacker, defender);
 });
+
+/* ------------ Advancing Troops ----------------- */
+// Actually advancing the troops happens when "Attack" is clicked AND attacker conquers a territory
+
+$('.advanceButton').click(function() {
+  $('.advanceBox').hide();
+  $('.attackBox').show();
+})
 
 
 /* ================ Main Function - Attack =============== */
@@ -189,13 +206,20 @@ var attack = function(attTerritory, defTerritory) {
     k++;
     // Conquering a territory
     if (defTerritory.troops === 0) {
+      // Decrement attackers troops (for placeholder of new territory)
       attTerritory.troops --;
+      // Conserving that troop
       defTerritory.troops = 1;
+      // Changing ownership of territory
       defTerritory.player = attacker;
+      // Pushing territory into attTerritories array
       attTerritories.push(defTerritory);
-      // defTerritories.splice(/* index of defTerritory */ , 1);
-      /* Create drop-down menu function with choices for (attTerritory.troops - 1) */
-      return alert(/* Good-looking pop-up to choose how many troops to advance */)
+      // Need to advance troops
+      if (attTerritory.troops > 1) {
+        advanceTroops();
+        $('.box').hide();
+        $('#p1AdvanceBox').show();
+      }
     };
   };
   // jQuery to update the values of changed territories, refocus on attackBox,
