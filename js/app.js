@@ -3,7 +3,7 @@ $(document).ready(function() {
   //   alert('Testing button');
   // });
   $('.box').hide();
-  $('#player1AttackBox').show();
+  // $('#player1AttackBox').show();
 });
 
 
@@ -14,6 +14,7 @@ var p1;
 var p2;
 var attacker;
 var turnCount = 0;
+var troopsToDeploy = 3;
 var attackerDiceCount;
 var defenderDiceCount;
 var attackerDiceResults = [];
@@ -36,11 +37,6 @@ var territories = [
 
 
 /* ================ Declaring some functions =============== */
-
-// Function to use in filtering our array
-// var attackerArray = function(obj) {
-//   if (obj === attacker
-// }
 
 // Determine who the attacker is
 var whoseTurn = function() {
@@ -100,11 +96,19 @@ var attackFrom = function() {
 };
 
 // Function to create attackToSelect box
-// var attackTo = function() {
-//   for (var i = 0; i < attTerritories.length; i++) {
-//     if (attTerritories[])
-//   }
-// }
+var attackTo = function(attackFromInput) {
+  for (var i = 0; i < attTerritories.length; i++) {
+    if (attackFromInput === attTerritories[i].name) {
+      var tempArray = attTerritories[i].borders;
+      var k = j + 1;
+      for (var j = 0; j < tempArray.length; j++) {
+        if (tempArray[j].player !== attacker) {
+          $('.attackToSelect').append("<option value='" + k + "'>" + tempArray[j].name + "</option>");
+        }
+      }
+    }
+  }
+};
 
 // Function to Advance troops
 var advanceTroops = function() {
@@ -124,28 +128,29 @@ var advanceTroops = function() {
 
 // Upon beginning game, shows P1 Deploy Box, populates selectbox with # of troop options
 $('#beginGame').click(function() {
-  // Code function for Territory Drop
+
+  /* !!!!!!!! ~~~~~~~~~~~   Code function for Territory Drop ~~~~~~~~~~~ !!!!!!! */
+
   // Hide all .box divs
   $('.box').hide();
   // Run function whoseTurn to set var attacker, populate attTerritory array
   whoseTurn();
-  var troopsToDeploy = 3;
+  // Run functions to create dropdown menus for deploying
   deployTroopsLoop();
   deployOntoLoop();
+  // Show deploybox
   $('.deployBox').show();
+  // Hide non-playing player's box
   whoseBox();
 });
 
 // Does the same as the above function, but upon end of the last players turn
 $('.endTurnButton').click(function() {
   turnCount ++;
-  // Working on this bit below!
-  p2Territories = territories.filter(territories)
-  // This bit above!
+  attTerritories = [];
   whoseTurn();
   $('.form').reset();
   $('.box').hide();
-  var troopsToDeploy = 3;
   deployTroopsLoop();
   deployOntoLoop();
   $('.deployBox').show();
@@ -171,6 +176,7 @@ $('.deployButton').click(function() {
   if (troopsToDeploy < 1) {
     $('.box').hide();
     $('.form').reset();
+    attackFrom();
     $('.attackBox').show();
     whoseBox();
   } else {
@@ -180,6 +186,13 @@ $('.deployButton').click(function() {
 
 // --------- Attacking ----------
 
+// Event listener to create attackTo select-box upon selection of attackFrom select-box
+$('.attackFromSelect').on("change", function() {
+  var attackFromInput = $('.attackFromSelect option:selected').val;
+  attackTo(attackFromInput);
+});
+
+// Click event for Attack button, running our attack function
 $('.attackButton').click(function() {
   for (var i = 0; i < territories.length; i ++) {
     if ($('.attackFromSelect option:selected').val === territories[i].name) {
@@ -193,8 +206,8 @@ $('.attackButton').click(function() {
 });
 
 /* ------------ Advancing Troops ----------------- */
-// What happens when "Attack" is clicked AND attacker conquers a territory
 
+// Click event for Advance troops button
 $('.advanceButton').click(function() {
   $('.advanceBox').hide();
   $('.attackBox').show();
