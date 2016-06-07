@@ -40,10 +40,21 @@ var territories = [
 var whoseTurn = function() {
   if (turnCount % 2 === 0) {
     attacker = p1;
-    attTerritories = p1Territories;
   } else {
     attacker = p2;
     attTerritories = p2Territories;
+  }
+  attTerritories = territories.filter(array) {
+    return(array.player === attacker)
+  }
+};
+
+// Function to hide non-playing player's box
+var whoseBox = function() {
+  if (turnCount % 2 === 0) {
+    $('.p2').hide();
+  } else {
+    $('.p1').hide();
   }
 };
 
@@ -90,12 +101,16 @@ var advanceTroops = function() {
 
 // Upon beginning game, shows P1 Deploy Box, populates selectbox with # of troop options
 $('#beginGame').click(function() {
-  whoseTurn();
+  // Code function for Territory Drop
+  // Hide all .box divs
   $('.box').hide();
+  // Run function whoseTurn to set var attacker, populate attTerritory array
+  whoseTurn();
   var troopsToDeploy = 3;
   deployTroopsLoop();
   deployOntoLoop();
   $('.deployBox').show();
+  whoseBox();
 });
 
 // Does the same as the above function, but upon end of the last players turn
@@ -111,17 +126,17 @@ $('.endTurnButton').click(function() {
   deployTroopsLoop();
   deployOntoLoop();
   $('.deployBox').show();
+  whoseBox();
 });
 
 
 $('.deployButton').click(function() {
   // Pushes troops to selected territory
-  var numTroopsToBeDeployed = $('#p1DeployTroopSelectBox').val;
+  var numTroopsToBeDeployed = $('.deployTroopSelectBox option:selected').text;
   for (var i = 0; i < territories.length; i++) {
-    var terrToDeployOn = $('#p1DeployTerritorySelectBox').val
+    var terrToDeployOn = $('.deployToTerritorySelectBox option:selected').text
     if (terrToDeployOn === territories[i].name) {
       numTroopsToBeDeployed = parseInt(numTroopsToBeDeployed, 10);
-      console.log("numTroopsToBeDeployed:", numTroopsToBeDeployed);
       territories[i].troops = territories[i].troops + numTroopsToBeDeployed;
     }
   }
@@ -133,7 +148,8 @@ $('.deployButton').click(function() {
   if (troopsToDeploy < 1) {
     $('.box').hide();
     $('.form').reset();
-    $('.attackBox .p2').show();
+    $('.attackBox').show();
+    whoseBox();
   } else {
     deployTroopsLoop();
   }
@@ -143,10 +159,10 @@ $('.deployButton').click(function() {
 
 $('.attackButton').click(function() {
   for (var i = 0; i < territories.length; i ++) {
-    if ($('#p1AttackFrom').val === territories[i].name) {
+    if ($('.attackFromSelect option:selected').val === territories[i].name) {
       var attacker = territories[i];
     }
-    if ($('#p1AttackTo').val === territories[i].name) {
+    if ($('.attackToSelect option:selected').val === territories[i].name) {
       var defender = territories[i];
     }
   }
@@ -159,6 +175,7 @@ $('.attackButton').click(function() {
 $('.advanceButton').click(function() {
   $('.advanceBox').hide();
   $('.attackBox').show();
+  whoseBox();
 })
 
 
@@ -218,7 +235,8 @@ var attack = function(attTerritory, defTerritory) {
       if (attTerritory.troops > 1) {
         advanceTroops();
         $('.box').hide();
-        $('#p1AdvanceBox').show();
+        $('.advanceBox').show();
+        whoseBox();
       }
     };
   };
