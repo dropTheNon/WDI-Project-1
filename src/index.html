@@ -21,59 +21,60 @@
     <div id="player1Box" class="col-lg-2 col-md-3 col-sm-4 playerBox">Player Box 1
       <div id="player1InfoBox">Player 1</div>
       <div id="player1ActionBox">Action Box
-        <div id="player1DeployBox" class="row box">
-         <!--  <form> -->
+        <div id="player1DeployBox" class="row box deployBox p1">
+         <!--  <form class="form"> -->
             <div id="howManyTroops">
-              <select id="p1DeployTroopSelectBox" class="deployTroopSelectBox">
+              <select id="p1DeployTroopSelectBox" class="deployHowMany">
+                <option value="" disabled selected hidden>Select number of troops...</option>
               </select>
-              <select id="p1DeployTerritorySelectBox" class="deployTerritorySelectBox">
-                <option>My Territory 1</option>
-                <option>My Territory 2</option>
-                <option>My Territory 3</option>
+              <select id="p1DeployToTerritorySelectBox" class="deployToTerritory">
+                <option value="" disabled selected hidden>Select territory to deploy onto...</option>
               </select>
             </div>
             <button id="p1DeployButton" class="deployButton button btn btn-primary">Deploy</button>
           <!-- </form> -->
         </div>
-        <div id="player1AttackBox" class="row box">
-          <!-- <form id="player1Attack"> -->
+        <div id="player1AttackBox" class="row box attackBox p1">
+          <!-- <form id="player1Attack" class="form"> -->
             <div id="p1AttackFrom" class="col-md-6">
-              <select>
-                <option>My Territory 1</option>
-                <option>My Territory 2</option>
-                <option>My Territory 3</option>
+              <select id="p1AttackFromSelect" class="attackFromSelect p1">
+                <option value="" disabled selected hidden>from...</option>
               </select>
             </div>
             <div id="p1AttackTo" class="col-md-6">
-              <select>
-                <option>Enemy 1</option>
-                <option>Enemy 2</option>
-                <option>Enemy 3</option>
+              <select id="p1AttackToSelect" class="attackToSelect p1">
+                <option value="" disabled selected hidden>Attack...</option>
               </select>
             </div>
-            <button id="p1AttackButton" class="attackButton submit btn btn-primary" style="width: 80%, margin: center">Attack</button>
-            <button id="p1EndAttackButton" class="endAttackButton submit btn btn-danger" style="width: 80%, margin: center">End Attacks</button>
+            <button id="p1AttackButton" class="attackButton submit btn btn-primary">Attack</button>
+            <button id="p1EndAttackButton" class="endAttackButton submit btn btn-danger">End Attacks</button>
           <!-- </form> -->
         </div>
-        <div id="player1ReinforceBox" class="row box">
-          <form id="player1Reinforce">
-            <div id="p1ReinforceFrom" class="col-md-6">
-              <select>
-                <option>My Territory 1</option>
-                <option>My Territory 2</option>
-                <option>My Territory 3</option>
-              </select>
+        <div id="p1AdvanceBox" class="row box advanceBox p1">
+          <!-- <form id="p1AdvanceForm"> -->
+            <div id="p1Advance" class="col-md-6">
+                <select id="p1AdvanceTroops" class="advanceTroopsSelect">
+                  <option value="" disabled selected hidden>How many troops to advance?</option>
+                </select>
             </div>
+            <button id="p1AdvanceButton" class="advanceButton submit btn btn-danger">Advance Troops</button>
+          <!-- </form> -->
+        </div>
+        <div id="player1ReinforceBox" class="row box reinforceBox p1">
+          <form id="player1Reinforce">
             <div id="p1ReinforceTo" class="col-md-6">
               <select>
-                <option>My Territory 1</option>
-                <option>My Territory 2</option>
-                <option>My Territory 3</option>
+                <option value="" disabled selected hidden>Reinforce troops to...</option>
+              </select>
+            </div>
+            <div id="p1ReinforceFrom" class="col-md-6">
+              <select>
+                <option value="" disabled selected hidden>from...</option>
               </select>
             </div>
             <div>
-              <button id="p1ReinforceButton" class="reinforceButton submit btn btn-primary" style="margin: center">Reinforce</button>
-              <button id="p1EndReinforceButton" class="endTurn submit btn btn-danger" style="margin: center">End Reinforcements</button>
+              <button id="p1ReinforceButton" class="reinforceButton submit btn btn-primary">Reinforce</button>
+              <button id="p1EndReinforceButton" class="endTurnButton submit btn btn-danger">End Reinforcements</button>
             </div>
           </form>
         </div>

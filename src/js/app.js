@@ -26,7 +26,8 @@ var territories = [
     // Example territory as object in array
     'name': 'Classroom2',
     'player': 'neutral',
-    'troops': 3
+    'troops': 3,
+    'borders': [/* Array of territory names this territory can attack or reinforce */]
   },
   {
 
@@ -36,6 +37,11 @@ var territories = [
 
 /* ================ Declaring some functions =============== */
 
+// Function to use in filtering our array
+// var attackerArray = function(obj) {
+//   if (obj === attacker
+// }
+
 // Determine who the attacker is
 var whoseTurn = function() {
   if (turnCount % 2 === 0) {
@@ -44,9 +50,9 @@ var whoseTurn = function() {
     attacker = p2;
     attTerritories = p2Territories;
   }
-  attTerritories = territories.filter(array) {
+  attTerritories = territories.filter(function(array) {
     return(array.player === attacker)
-  }
+  })
 };
 
 // Function to hide non-playing player's box
@@ -68,20 +74,37 @@ var sortArray = function(array) {
   return array.sort().reverse();
 };
 
-// Function to create deployTroopSelectBox
+// Function to create deployHowMany troops select-box
 var deployTroopsLoop = function () {
   for (var i = 0; i < troopsToDeploy; i++) {
     var j = i + 1;
-    $('.deployTroopSelectBox').append("<option value='" + j + "'>" + j + "</option>");
+    $('.deployHowMany').append("<option value='" + j + "'>" + j + "</option>");
   }
 };
 
-// Function to create deployToTerritorySelectBox
+// Function to create deployToTerritory select-box
 var deployOntoLoop = function () {
   for (var i = 0; i < attTerritories.length; i++) {
-    $('.deployToTerritorySelectBox').append("<option value='" + i + "'>" + attTerritories[i].name + "</option");
+    $('.deployToTerritory').append("<option value='" + i + "'>" + attTerritories[i].name + "</option");
   }
 };
+
+// Function to create attackFromSelect box
+var attackFrom = function() {
+  var j = i + 1;
+  for (var i = 0; i < attTerritories.length; i++) {
+    if (attTerritories[i].troops > 1) {
+      $('.attackFromSelect').append("<option value='" + j + "'>" + attTerritories[i].name + "</option>");
+    }
+  }
+};
+
+// Function to create attackToSelect box
+// var attackTo = function() {
+//   for (var i = 0; i < attTerritories.length; i++) {
+//     if (attTerritories[])
+//   }
+// }
 
 // Function to Advance troops
 var advanceTroops = function() {
@@ -170,7 +193,7 @@ $('.attackButton').click(function() {
 });
 
 /* ------------ Advancing Troops ----------------- */
-// Actually advancing the troops happens when "Attack" is clicked AND attacker conquers a territory
+// What happens when "Attack" is clicked AND attacker conquers a territory
 
 $('.advanceButton').click(function() {
   $('.advanceBox').hide();
