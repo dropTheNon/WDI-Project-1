@@ -17,6 +17,9 @@ var turnCount = 0;
 var troopsToDeploy;
 var attackerDiceCount;
 var defenderDiceCount;
+var advancingTerritory;
+var advanceableTroops;
+var receivingTerritory;
 var attackerDiceResults = [];
 var defenderDiceResults = [];
 var attTerritories = [];
@@ -38,7 +41,7 @@ var territories = [
   {
     'name': 'Classroom2',
     'player': 'p2',
-    'troops': 3,
+    'troops': 1,
     'borders': [/* Array of territory names this territory can attack or reinforce */
       "Classroom1",
       "Classroom3",
@@ -88,7 +91,6 @@ var whoseTurn = function() {
     attacker = "p1";
   } else {
     attacker = "p2";
-    attTerritories = p2Territories;
   }
   attTerritories = territories.filter(function(array) {
     return(array.player === attacker)
@@ -119,7 +121,7 @@ var deployTroopsLoop = function () {
   $('.deployHowMany').html('<option value="0" disabled selected hidden>Select number of troops...</option>');
   for (var i = 0; i < troopsToDeploy; i++) {
     var j = i + 1;
-    $('.deployHowMany').append("<option value='" + j + "'>" + j + "</option>");
+    $('.deployHowMany').append('<option value="' + j + '">' + j + '</option>');
   }
 };
 
@@ -127,12 +129,14 @@ var deployTroopsLoop = function () {
 var deployOntoLoop = function () {
   $('.deployToTerritory').html('<option value="0" disabled selected hidden>Select territory to deploy onto...</option>');
   for (var i = 0; i < attTerritories.length; i++) {
-    $('.deployToTerritory').append("<option value='" + attTerritories[i].name + "'>" + attTerritories[i].name + "</option");
+    $('.deployToTerritory').append('<option value="' + attTerritories[i].name + '">' + attTerritories[i].name + '</option>');
   }
 };
 
 // Function to create attackFromSelect box
 var attackFrom = function() {
+  $('.attackFromSelect').html('<option value="0" disabled selected hidden>Attack with</option>');
+  whoseTurn();
   for (var i = 0; i < attTerritories.length; i++) {
     if (attTerritories[i].troops > 1) {
       $('.attackFromSelect').append("<option value='" + attTerritories[i].name + "'>" + attTerritories[i].name + "</option>");
@@ -142,33 +146,50 @@ var attackFrom = function() {
 
 // Function to create attackToSelect box
 var attackTo = function(attackFromInput) {
-  $('.attackToSelect').html('');
-
+  $('.attackToSelect').html('<option value="0" disabled selected hidden>Attack to</option>');
+  // Looping through attacker's territories to get the territory names (arrAttNames) and
+  // territories that our selected attackFrom territory can attack (tempArray)
+  var arrAttNames = [];
   for (var i = 0; i < attTerritories.length; i++) {
-    if (attackFromInput === attTerritories[i].name) {
+    arrAttNames.push(attTerritories[i].name);
+    if (attTerritories[i].name === attackFromInput) {
       var tempArray = attTerritories[i].borders;
-      console.log(tempArray);
-      for (var j = 0; j < tempArray.length; j++) {
-        if (tempArray[j].player !== attacker) {
-          $('.attackToSelect').append("<option value='" + tempArray[j] + "'>" + tempArray[j] + "</option>");
-        }
-      }
     }
+  }
+  // Creating final array of attackable territories to use in populating the dropdown
+  var finalAttArr = [];
+  // Using
+  for (var j = 0; j < tempArray.length; j++) {
+    if (arrAttNames.indexOf(tempArray[j]) === -1) {
+      finalAttArr.push(tempArray[j]);
+    }
+  }
+  for (var k = 0; k < finalAttArr.length; k++) {
+    $('.attackToSelect').append("<option value='" + finalAttArr[k] + "'>" + finalAttArr[k] + "</option>");
   }
   $('.attackButton').show();
 };
 
 
 
-// Function to Advance troops
-var advanceTroops = function() {
-  var advanceableTroops = attTerritory.troops - 1;
+// Function to create dropdowns to advance troops
+var advanceTroops = function(attTerritory, defTerritory) {
+  $('.advanceTroopsSelect').html('<option value="0" disabled selected hidden>How many troops to advance?</option>')
+  advanceableTroops = parseInt(attTerritory.troops) - 1;
   if (advanceableTroops > 0) {
-    for (var i = 0; i < advanceableTroops; i++) {
-      var j = i + 1;
-      $('.advanceTroopsSelect').append("<option value='" + j + "'>" + j + "</option>" )
+    for (var i = 0; i <= advanceableTroops; i++) {
+      $('.advanceTroopsSelect').append("<option value='" + i + "'>" + i + "</option>" )
     }
   }
+  advancingTerritory = attTerritory;
+  receivingTerritory = defTerritory;
+  attackFrom();
+};
+
+// Function to actually advance the troops!
+var advanceTheTroops = function(advancingTerritory, receivingTerritory, advanceableTroops) {
+  advancingTerritory.troops = parseInt(advancingTerritory.troops) - parseInt(advanceableTroops);
+  receivingTerritory.troops = parseInt(receivingTerritory.troops) + parseInt(advanceableTroops);
 };
 
 /* =============== Click Event Delegation Declaration ============= */
@@ -203,25 +224,31 @@ $('#beginGame').click(function() {
 $('.endTurnButton').click(function() {
   turnCount ++;
   attTerritories = [];
+  troopsToDeploy = 3;
   whoseTurn();
-  $('.form').reset();
+  // $('.form').reset();
   $('.box').hide();
   deployTroopsLoop();
   deployOntoLoop();
   $('.deployBox').show();
   whoseBox();
+  console.log(turnCount);
+  console.log(attTerritories);
 });
 
 
 $('.deployButton').click(function(e) {
   e.preventDefault();
   // Pushes troops to selected territory
-  var numTroopsToBeDeployed = $('.deployHowMany option:selected').val();
+  var numTroopsToBeDeployed = $('.deployHowMany').val();
+  console.log(numTroopsToBeDeployed);
+  var terrToDeployOn = $('.deployToTerritory').val();
+  console.log(terrToDeployOn);
   for (var i = 0; i < territories.length; i++) {
-    var terrToDeployOn = $('.deployToTerritory option:selected').text();
-    console.log(terrToDeployOn);
     if (terrToDeployOn === territories[i].name) {
       territories[i].troops = parseInt(numTroopsToBeDeployed) + parseInt(territories[i].troops);
+      console.log(territories);
+      console.log(numTroopsToBeDeployed);
     }
   }
   // Clears selectboxes (I hope!!!)
@@ -229,7 +256,7 @@ $('.deployButton').click(function(e) {
   $('.deployToTerritory').val("0");
   // Decrement troopsToDeploy
   troopsToDeploy = troopsToDeploy - numTroopsToBeDeployed;
-  console.log(territories);
+  // console.log(territories);
   console.log(troopsToDeploy);
   // Checking to see if deployment still ongoing
   if (troopsToDeploy < 1) {
@@ -251,29 +278,48 @@ $('.deployButton').click(function(e) {
 $('.attackFromSelect').on("change", function() {
   var attackFromInput = $('.attackFromSelect').val();
   attackTo(attackFromInput);
+  $('.attackButton').show();
 });
 
 // Click event for Attack button, running our attack function
 $('.attackButton').click(function() {
+  $('.dialogueBox').html('');
+  attackerDiceCount = [];
+  attackerDiceResults = [];
+  defenderDiceCount = [];
+  defenderDiceResults = [];
+  var attacker;
+  var defender;
   for (var i = 0; i < territories.length; i ++) {
-    if ($('.attackFromSelect option:selected').val === territories[i].name) {
-      var attacker = territories[i];
+    if ($('.attackFromSelect option:selected').val() === territories[i].name) {
+      attacker = territories[i];
     }
-    if ($('.attackToSelect option:selected').val === territories[i].name) {
-      var defender = territories[i];
+    if ($('.attackToSelect option:selected').val() === territories[i].name) {
+      // console.log(i);
+      defender = territories[i];
+      // console.log(territories[i]);
     }
   }
   attack(attacker, defender);
+  $('.attackButton').hide();
+  attackFrom();
 });
 
 /* ------------ Advancing Troops ----------------- */
 
 // Click event for Advance troops button
 $('.advanceButton').click(function() {
+  var troopsToAdvance = $('.advanceButton').val();
   $('.advanceBox').hide();
+  // $('.attackFromSelect').val("0");
+  // $('.attackToSelect').val("0");
+  console.log(territories);
+  console.log(attTerritories);
+  advanceTheTroops(advancingTerritory, receivingTerritory, advanceableTroops);
+  attackFrom();
   $('.attackBox').show();
   whoseBox();
-})
+});
 
 
 /* ================ Main Function - Attack =============== */
@@ -284,8 +330,6 @@ $('.advanceButton').click(function() {
 // and then will allow the attacker to advance troops.
 
 var attack = function(attTerritory, defTerritory) {
-
-  /* !!!!! --------- Need to work on this bit below, perhaps? -------- !!!!!!!! */
 
   var effectiveTroops = parseInt(attTerritory.troops) - 1;
   // Attackers Dice Count
@@ -312,7 +356,9 @@ var attack = function(attTerritory, defTerritory) {
 
   // Comparing dice results of two sorted, reversed arrays (of possibly different lengths)
   var sortedAttackerArray = sortArray(attackerDiceResults);
+  $('.dialogueBox').append('<p>' + sortedAttackerArray + '</p>');
   var sortedDefenderArray = sortArray(defenderDiceResults);
+  $('.dialogueBox').append('<p>' + sortedDefenderArray + '</p>');
   var k = 0;
   while(k < sortedAttackerArray.length && k < sortedDefenderArray.length) {
     if (sortedAttackerArray[k] > sortedDefenderArray[k]) {
@@ -321,25 +367,26 @@ var attack = function(attTerritory, defTerritory) {
       attTerritory.troops --;
     }
     k++;
-    // Conquering a territory
-    if (defTerritory.troops === 0) {
-      // Decrement attackers troops (for placeholder of new territory)
-      attTerritory.troops --;
-      // Conserving that troop
-      defTerritory.troops = 1;
-      // Changing ownership of territory
-      defTerritory.player = attacker;
-      // Pushing territory into attTerritories array
-      attTerritories.push(defTerritory);
-      // Need to advance troops
-      if (attTerritory.troops > 1) {
-        advanceTroops();
-        $('.box').hide();
-        $('.advanceBox').show();
-        whoseBox();
-      }
-    };
+  };
+  // Conquering a territory
+  if (defTerritory.troops === 0) {
+    // Decrement attackers troops (for placeholder of new territory)
+    attTerritory.troops --;
+    // Conserving that troop
+    defTerritory.troops = 1;
+    // Changing ownership of territory
+    defTerritory.player = attacker;
+    // Pushing territory into attTerritories array
+    attTerritories.push(defTerritory);
+    // Need to advance troops
+    if (attTerritory.troops > 1) {
+      advanceTroops(attTerritory, defTerritory);
+      $('.box').hide();
+      $('.advanceBox').show();
+      whoseBox();
+    }
   };
   // jQuery to update the values of changed territories, refocus on attackBox,
   // display message (alert?) stating result, including showing dice rolls.
+  $('.dialogueBox').append('<p>' + attacker + ' attacked ' + defTerritory.name + ' with ' + attTerritory.name + ', which left ' + defTerritory.name + ' with ' + defTerritory.troops + ' troops, and ' + attTerritory.name + ' with ' + attTerritory.troops + ' troops.</p>');
 };
