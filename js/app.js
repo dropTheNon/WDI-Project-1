@@ -11,7 +11,7 @@ $(document).ready(function() {
 var territories = [
   {
     'name': 'Classroom 1',
-    'player': 'p1',
+    'player': 'neutral',
     'troops': 3,
     'borders': [/* Array of territory names this territory can attack or reinforce */
       'Classroom 2',
@@ -21,7 +21,7 @@ var territories = [
   },
   {
     'name': 'Classroom 2',
-    'player': 'p2',
+    'player': 'neutral',
     'troops': 3,
     'borders': [/* Array of territory names this territory can attack or reinforce */
       'Classroom 1',
@@ -210,6 +210,12 @@ var numTroopsToBeDeployed;
 var terrToDeployOn;
 var territoryAttacking;
 var territoryDefending;
+var numTerritories = territories.length;
+var numPlayers = 2;
+var totPlayers = numPlayers + 1;
+var numToDrop;
+var terrToPush1;
+var terrToPush2;
 var attackerDiceResults = [];
 var defenderDiceResults = [];
 var attTerritories = [];
@@ -218,6 +224,31 @@ var p2Territories = [];
 
 
 /* ================ Declaring some functions =============== */
+
+// Determines initial drop of territories
+var dropFunction = function() {
+  numToDrop = numTerritories / totPlayers;
+  while (p1Territories.length < numToDrop) {
+    terrToPush1 = territories[Math.floor(Math.random() * territories.length)];
+    if (terrToPush1.player === 'neutral') {
+      terrToPush1.player = 'p1';
+      p1Territories.push(terrToPush1);
+    }
+  }
+  while (p2Territories.length < numToDrop) {
+    terrToPush2 = territories[Math.floor(Math.random() * territories.length)];
+    if (terrToPush2.player === 'neutral') {
+      terrToPush2.player = 'p2';
+      p2Territories.push(terrToPush2);
+    }
+  }
+};
+
+// Determine a winner
+var winCheck = function() {
+  if (p1Territories.length === 0 || p2Territories.length === 0)
+    alert(attacker + ' wins!');
+}
 
 // Determine who the attacker is
 var whoseTurn = function() {
@@ -360,6 +391,9 @@ var advanceTheTroops = function(advancingTerritory, receivingTerritory, advancea
 // Upon beginning game, shows P1 Deploy Box, populates selectbox with # of troop options
 $('#beginGame').click(function() {
   console.log(territories);
+  dropFunction();
+  console.log(p1Territories);
+  console.log(p2Territories);
   $('#beginGame').hide();
 
   /* !!!!!!!! ~~~~~~~~~~~   Code function for Territory Drop ~~~~~~~~~~~ !!!!!!! */
@@ -557,13 +591,19 @@ var attack = function(attTerritory, defTerritory) {
     // Conquering a territory
     if (defTerritory.troops === 0) {
       // Decrement attackers troops (for placeholder of new territory)
-      attTerritory.troops --;
+      attTerritory.troops = parseInt(attTerritory.troops) - 1;
       // Conserving that troop
       defTerritory.troops = 1;
       // Changing ownership of territory
       defTerritory.player = attacker;
       // Pushing territory into attTerritories array
       attTerritories.push(defTerritory);
+      if (turnCount % 2 === 0) {
+        p1Territories.push(defTerritory);
+      } else {
+        p2Territories.push(defTerritory);
+      }
+      winCheck();
       // Need to advance troops
       if (attTerritory.troops > 1) {
         advanceTroops(attTerritory, defTerritory);
