@@ -1,5 +1,5 @@
 div {
-  border: 1px solid red;
+  border: 1px solid black;
   margin: auto;
   text-align: center;
 }
@@ -20,6 +20,6 @@ select:invalid {
 }
 
 .dialogueBox {
-  border: 1px solid blue;
+  border: 1px solid red;
   height: 200px;
 }
