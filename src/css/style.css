@@ -18,3 +18,8 @@ h2 {
 select:invalid {
   color: grey;
 }
+
+.dialogueBox {
+  border: 1px solid blue;
+  height: 200px;
+}
