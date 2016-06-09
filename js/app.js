@@ -198,7 +198,7 @@ var p2;
 var attacker;
 var defender;
 var turnCount = 0;
-var troopsToDeploy;
+var troopsToDeploy = 3;
 var attackFromInput;
 var attackerDiceCount;
 var defenderDiceCount;
@@ -210,10 +210,13 @@ var numTroopsToBeDeployed;
 var terrToDeployOn;
 var territoryAttacking;
 var territoryDefending;
+var playerToCheck;
 var numTerritories = territories.length;
 var numPlayers = 2;
 var totPlayers = numPlayers + 1;
 var numToDrop;
+var p1TotalTroops;
+var p2TotalTroops;
 var terrToPush1;
 var terrToPush2;
 var attackerDiceResults = [];
@@ -221,6 +224,8 @@ var defenderDiceResults = [];
 var attTerritories = [];
 var p1Territories = [];
 var p2Territories = [];
+var p1TerritoriesNames = [];
+var p2TerritoriesNames = [];
 
 
 /* ================ Declaring some functions =============== */
@@ -228,18 +233,26 @@ var p2Territories = [];
 // Determines initial drop of territories
 var dropFunction = function() {
   numToDrop = numTerritories / totPlayers;
-  while (p1Territories.length < numToDrop) {
+  while (p1Territories.length < (numToDrop - 1)) {
     terrToPush1 = territories[Math.floor(Math.random() * territories.length)];
     if (terrToPush1.player === 'neutral') {
       terrToPush1.player = 'p1';
       p1Territories.push(terrToPush1);
+      var p1TerritoriesNames = [];
+      for (var i = 0; i < p1Territories.length; i++) {
+        p1TerritoriesNames.push(p1Territories[i].name);
+      }
     }
   }
-  while (p2Territories.length < numToDrop) {
+  while (p2Territories.length < (numToDrop - 1)) {
     terrToPush2 = territories[Math.floor(Math.random() * territories.length)];
     if (terrToPush2.player === 'neutral') {
       terrToPush2.player = 'p2';
       p2Territories.push(terrToPush2);
+      var p2TerritoriesNames = [];
+      for (var i = 0; i < p2Territories.length; i++) {
+        p2TerritoriesNames.push(p2Territories[i].name);
+      }
     }
   }
 };
@@ -247,7 +260,7 @@ var dropFunction = function() {
 // Determine a winner
 var winCheck = function() {
   if (p1Territories.length === 0 || p2Territories.length === 0)
-    alert(attacker + ' wins!');
+    alert(' ' + attacker + ' wins!');
 }
 
 // Determine who the attacker is
@@ -383,6 +396,43 @@ var advanceTheTroops = function(advancingTerritory, receivingTerritory, advancea
   console.log(territories);
 };
 
+// WinCheck function
+var winCheck = function(winCheckVar) {
+  if (turnCount % 2 === 0) {
+    playerToCheck = p2Territories;
+  } else {
+    playerToCheck = p1Territories;
+  }
+  for (var i = 0; i < playerToCheck.length; i++) {
+    if (playerToCheck[i].name === winCheckVar) {
+      playerToCheck.splice(i, 1);
+    }
+  }
+  console.log(playerToCheck);
+};
+
+
+// Creating a function to update player infoBoxes
+var updateInfo = function() {
+  var troopCount = 0;
+  if (turnCount % 2 === 0) {
+    playerToCheck = p2Territories;
+  } else {
+    playerToCheck = p1Territories;
+  }
+  for (var i = 0; i < playerToCheck.length; i++) {
+    troopCount = troopCount + parseInt(playerToCheck[i].troops);
+     if (turnCount % 2 === 0) {
+      p1TotalTroops = troopCount;
+    } else {
+      p2TotalTroops = troopCount;
+    }
+  }
+  $('.infoBox.p1').html('<p>Player 1</p><p># of Territories: ' + p1Territories.length + '</p><p>Territories: ' + p1TerritoriesNames + '</p><p>Total Troops: ' + p1TotalTroops + '</p><p>Troops Due: ' + troopsToDeploy + '</p>');
+  $('.infoBox.p2').html('<p>Player 2</p><p># of Territories: ' + p2Territories.length + '</p><p>Territories: ' + p2TerritoriesNames + '</p><p>Total Troops: ' + p2TotalTroops + '</p><p>Troops Due: ' + troopsToDeploy + '</p>');
+};
+
+
 /* =============== Click Event Delegation Declaration ============= */
 
 
@@ -392,6 +442,7 @@ var advanceTheTroops = function(advancingTerritory, receivingTerritory, advancea
 $('#beginGame').click(function() {
   console.log(territories);
   dropFunction();
+  updateInfo();
   console.log(p1Territories);
   console.log(p2Territories);
   $('#beginGame').hide();
@@ -463,6 +514,7 @@ $('.deployButton').click(function(e) {
   if (troopsToDeploy < 1) {
     $('.box').hide();
     // $('.form').reset();
+    updateInfo();
     attackFrom();
     $('.attackBox, .attackBox *').show();
     whoseBox();
@@ -471,6 +523,7 @@ $('.deployButton').click(function(e) {
     deployTroopsLoop();
     deployOntoLoop();
   }
+  $('.dialogueBox').append('<p>' + attacker + ' deployed ' + numTroopsToBeDeployed + ' on ' + terrToDeployOn);
 });
 
 // --------- Attacking ----------
@@ -514,6 +567,7 @@ $('.attackButton').click(function() {
   attack(attackingTerritory, defendingTerritory);
   $('.attackButton').hide();
   attackFrom();
+  updateInfo();
 });
 
 /* ------------ Advancing Troops ----------------- */
@@ -536,6 +590,7 @@ $('.advanceButton').click(function() {
   attackFrom();
   $('.attackBox, .attackBox *').show();
   whoseBox();
+  updateInfo();
 });
 
 
@@ -547,6 +602,7 @@ $('.advanceButton').click(function() {
 // and then will allow the attacker to advance troops.
 
 var attack = function(attTerritory, defTerritory) {
+  var winCheckVar = defTerritory.name
 
   if (attTerritory.player === defTerritory.player) {
     alert('You can\'t attack yourself, dummy!');
@@ -610,6 +666,7 @@ var attack = function(attTerritory, defTerritory) {
         $('.box').hide();
         $('.advanceBox, .advanceBox *').show();
         whoseBox();
+        updateInfo();
       }
     };
     // jQuery to update the values of changed territories, refocus on attackBox,
